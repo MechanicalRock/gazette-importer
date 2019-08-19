@@ -1,8 +1,6 @@
 const AwsSamPlugin = require("aws-sam-webpack-plugin");
 const awsSamPlugin = new AwsSamPlugin();
 
-console.log(awsSamPlugin)
-
 module.exports = {
   entry: awsSamPlugin.entry(),
   output: {

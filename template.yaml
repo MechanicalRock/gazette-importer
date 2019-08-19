@@ -11,8 +11,7 @@ Parameters:
   Bucket:
     Type: String
 Conditions:
-  HasSourcePortfolio:
-    !Not [!Equals ["", SourcePortfolioId]]
+  HasSourcePortfolio: !Not [!Equals [!Ref SourcePortfolioId, ""]]
 Globals:
   Function:
     Runtime: nodejs10.x
@@ -45,8 +44,7 @@ Resources:
         Cloudwatch:
           Type: CloudWatchEvent
           Properties:
-            InputTransformer:
-              InputPath: "$.detail"
+            InputPath: "$.detail"
             Pattern:
               source:
                 - gazette
