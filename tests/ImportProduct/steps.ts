@@ -53,7 +53,10 @@ export async function WhenIAssociateAProductWithThePortfolio(
 
   for await (const portfolio of ListPortfolios(catalog)) {
       if (portfolio.DisplayName === id) {
-          await ImportProduct(catalog, portfolio.Id, products[0]);
+          await ImportProduct(catalog, {
+            portfolioId: portfolio.Id,
+            productId: products[0]
+          });
           return;
       }
   }

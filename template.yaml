@@ -3,10 +3,16 @@ Transform: AWS::Serverless-2016-10-31
 Parameters:
   EventBus:
     Type: String
+  SourcePortfolioId:
+    Type: String
+    Default: ""
   PortfolioId:
     Type: String
   Bucket:
     Type: String
+Conditions:
+  HasSourcePortfolio:
+    !Not [!Equals ["", SourcePortfolioId]]
 Globals:
   Function:
     Runtime: nodejs10.x
@@ -20,6 +26,11 @@ Resources:
       ReservedConcurrentExecutions: 1
       Environment:
         Variables:
+          SOURCE_PORTFOLIO_ARN:
+            Fn::If:
+              - HasSourcePortfolio
+              - !Sub "arn:aws:servicecatalog:${AWS::Region}:${AWS::AccountId}:portfolio/${SourcePortfolioId}"
+              - !Ref AWS::NoValue
           PORTFOLIO_ARN: !Sub "arn:aws:servicecatalog:${AWS::Region}:${AWS::AccountId}:portfolio/${PortfolioId}"
           EVENT_BUS: !Ref EventBus
       Tracing: Active
@@ -30,7 +41,7 @@ Resources:
               - events:PutEvents
             Effect: Allow
             Resource: !Sub "arn:aws:events:${AWS::Region}:${AWS::AccountId}:eventBus/${EventBus}"
-      Events: 
+      Events:
         Cloudwatch:
           Type: CloudWatchEvent
           Properties:
@@ -40,6 +51,12 @@ Resources:
               source:
                 - gazette
               detail-type:
-                - publisher.Created
+                - Fn::If:
+                  - HasSourcePortfolio
+                  - importer.Imported
+                  - publisher.Created
               Resources:
-                - !Sub "arn:aws:s3:::${Bucket}"
+                - Fn::If:
+                  - HasSourcePortfolio
+                  - !Sub "arn:aws:servicecatalog:${AWS::Region}:${AWS::AccountId}:portfolio/${SourcePortfolioId}"
+                  - !Sub "arn:aws:s3::${Bucket}"

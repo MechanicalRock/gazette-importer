@@ -11,19 +11,29 @@ export const handler: Handler = EventWrapper(
       .required()
       .asString();
 
+    const sourcePortfolioArn = process.env["SOURCE_PORTFOLIO_ARN"];
+
+    const sourcePortfolioId = sourcePortfolioArn
+      ? sourcePortfolioArn.split("/")[1]
+      : undefined;
+
     const portfolioId = portfolioArn.split("/")[1];
 
-    const params = await ValidateInput(event);
+    const { productId, name, version } = await ValidateInput(event);
 
     const catalog = captureAWSClient(new ServiceCatalog());
 
-    await ImportProduct(catalog, portfolioId, params.productId);
+    await ImportProduct(catalog, {
+      sourcePortfolioId,
+      portfolioId,
+      productId
+    });
 
     return await ValidateOutput({
       portfolioArn,
-      productId: params.productId,
-      name: params.name,
-      version: params.version
+      productId,
+      name,
+      version
     });
   },
   get("EVENT_BUS")
