@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  Description:
+    Type: String
+  DisplayName:
+    Type: String
+  ProviderName:
+    Type: String
+
+Resources:
+  Portfolio:
+    Type: AWS::ServiceCatalog::Portfolio
+    Properties: 
+      Description: !Ref Description
+      DisplayName: !Ref DisplayName
+      ProviderName: !Ref ProviderName
+
+Outputs:
+  PortfolioArn:
+    Value: !Sub "arn:aws:servicecatalog:${AWS::Region}:${AWS::AccountId}:portfolio/${Portfolio}"
+  PortfolioId:
+    Value: !Ref Portfolio

@@ -1,0 +1,47 @@
+{
+  "name": "@mechanicalrock/gazette-importer",
+  "version": "0.0.1",
+  "description": "Importer service",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MechanicalRock/gazette-importer"
+  },
+  "scripts": {
+    "build": "webpack-cli",
+    "watch": "webpack-cli -w",
+    "test": "jest"
+  },
+  "keywords": [
+    "aws",
+    "service",
+    "catalog"
+  ],
+  "author": "matt.tyler@mechanicalrock.io",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/aws-lambda": "^8.10.23",
+    "@types/hapi__joi": "^15.0.2",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.13.4",
+    "@types/uuid": "^3.4.4",
+    "aws-sam-webpack-plugin": "^0.3.1",
+    "babel-loader": "^8.0.5",
+    "exponential-backoff": "^2.1.1",
+    "jest": "^24.7.1",
+    "typescript": "^3.4.3",
+    "uuid": "^3.3.2",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+    "@hapi/joi": "^15.1.0",
+    "aws-sdk": "^2.503.0",
+    "aws-xray-sdk": "^2.3.4",
+    "env-var": "^4.0.1"
+  }
+}

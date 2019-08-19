@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  EventBus:
+    Type: String
+  PortfolioId:
+    Type: String
+  Bucket:
+    Type: String
+Globals:
+  Function:
+    Runtime: nodejs10.x
+    Timeout: 20
+Resources:
+  ImportProduct:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/ImportProduct
+      Handler: index.handler
+      ReservedConcurrentExecutions: 1
+      Environment:
+        Variables:
+          PORTFOLIO_ARN: !Sub "arn:aws:servicecatalog:${AWS::Region}:${AWS::AccountId}:portfolio/${PortfolioId}"
+          EVENT_BUS: !Ref EventBus
+      Tracing: Active
+      Policies:
+        - arn:aws:iam::aws:policy/AWSServiceCatalogAdminFullAccess
+        - Statement:
+          - Action:
+              - events:PutEvents
+            Effect: Allow
+            Resource: !Sub "arn:aws:events:${AWS::Region}:${AWS::AccountId}:eventBus/${EventBus}"
+      Events: 
+        Cloudwatch:
+          Type: CloudWatchEvent
+          Properties:
+            InputTransformer:
+              InputPath: "$.detail"
+            Pattern:
+              source:
+                - gazette
+              detail-type:
+                - publisher.Created
+              Resources:
+                - !Sub "arn:aws:s3:::${Bucket}"
