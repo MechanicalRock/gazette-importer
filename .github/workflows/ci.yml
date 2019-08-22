@@ -1,0 +1,55 @@
+name: CI
+on:
+  push:
+    branches:
+    - master
+    tags:
+      - '*'
+
+jobs:
+  checkout:
+    name: Checkout
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Prepare Environment
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - name: Install
+      run: npm ci
+    - name: Test
+      run: npm run test -- --coverage schema
+    - name: Build
+      run: npm run build
+    - name: SAM Package
+      uses: ./.github/actions/sam/package
+      env:
+        SAM_CLI_TELEMETRY: 0
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      with:
+        prefix: ${{ github.repository }}/${{ github.sha }}
+        bucket: ${{ secrets.BUCKET }} 
+        template_file: template.yaml
+        output_template_file: ${{ github.sha }}.yaml
+        working_directory: ./.aws-sam/build
+    - name: Push Template to S3
+      uses: actions/aws/cli@master
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      with:
+        args: >-
+          s3 cp ./.aws-sam/build/${{ github.sha }}.yaml
+          s3://${{ secrets.BUCKET }}/${{ github.repository }}/${{ github.sha }}/template.yaml
+    - name: Publish
+      if: startsWith(github.ref, 'refs/tags')
+      uses: ./.github/actions/sam/publish
+      env:
+        SAM_CLI_TELEMETRY: 0
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      with:
+        TEMPLATE: ./.aws-sam/build/${{ github.sha }}.yaml

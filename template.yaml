@@ -1,5 +1,15 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: gazette-importer
+    Description: Associate gazette published products with portfolios
+    Author: Matt Tyler
+    SpdxLicenseId: Apache-2.0
+    LicenseUrl: LICENSE.txt
+    ReadmeUrl: README.md
+    HomePageUrl: https://github.com/MechanicalRock/gazette-importer
+    SourceCodeUrl: https://github.com/MechanicalRock/gazette-importer
 Parameters:
   EventBus:
     Type: String
