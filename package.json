@@ -7,6 +7,7 @@
     "url": "https://github.com/MechanicalRock/gazette-importer"
   },
   "scripts": {
+    "postbuild": "copyfiles LICENSE.txt README.md ./.aws-sam/build",
     "build": "webpack-cli",
     "watch": "webpack-cli -w",
     "test": "jest"
@@ -31,6 +32,7 @@
     "@types/uuid": "^3.4.4",
     "aws-sam-webpack-plugin": "^0.3.1",
     "babel-loader": "^8.0.5",
+    "copyfiles": "^2.1.1",
     "exponential-backoff": "^2.1.1",
     "jest": "^24.7.1",
     "typescript": "^3.4.3",

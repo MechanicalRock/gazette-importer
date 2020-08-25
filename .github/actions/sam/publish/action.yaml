@@ -1,0 +1,11 @@
+name: AWS SAM Publish
+description: Publish a SAM application
+author: matt.tyler@mechanicalrock.io
+runs:
+  using: docker
+  image: Dockerfile
+inputs:
+    template:
+      description: template
+      required: false
+      default: packaged.yaml
