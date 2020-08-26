@@ -13,6 +13,7 @@ Metadata:
 Parameters:
   EventBus:
     Type: String
+    Default: default
   SourcePortfolioId:
     Type: String
     Default: ""

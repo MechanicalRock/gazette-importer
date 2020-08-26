@@ -37,7 +37,7 @@ NB: Remember that the `TEMPLATE_BUCKET` must have a trail enabled this logging w
 ```bash
 ARTIFACT_BUCKET=
 STACK_NAME=
-BUCKET=
+TEMPLATE_BUCKET=
 EVENT_BUS=
 PORTFOLIO_ID=
 
@@ -46,7 +46,7 @@ sam package --template-file template.yaml --s3-bucket $ARTIFACT_BUCKET \
 
 sam deploy --template-file packaged.yaml --stack-name $STACK_NAME \
     --capabilities CAPABILITY_IAM --parameter-overrides \
-    PortfolioId=$PORTFOLIO_ID Bucket=$BUCKET EventBus=$EVENT_BUS
+    PortfolioId=$PORTFOLIO_ID Bucket=$TEMPLATE_BUCKET EventBus=$EVENT_BUS
 ```
 
 ## Todo
