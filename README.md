@@ -32,7 +32,9 @@ if using to import products from a shared portfolio into a local portfolio:
 
 To deploy, change in to the `.aws-sam/build` directory and run the following script with the appropriate values substituted.
 
-NB: Remember that the `TEMPLATE_BUCKET` must have a trail enabled this logging write events to the bucket.
+NB: 
+* Remember that the `TEMPLATE_BUCKET` must have a trail enabled this logging write events to the bucket.
+* `SOURCE_PORTFOLIO_ID` is an optional parameter if you wish to import portfolios shared from a master account
 
 ```bash
 ARTIFACT_BUCKET=
@@ -40,13 +42,14 @@ STACK_NAME=
 TEMPLATE_BUCKET=
 EVENT_BUS=
 PORTFOLIO_ID=
+SOURCE_PORTFOLIO_ID=
 
 sam package --template-file template.yaml --s3-bucket $ARTIFACT_BUCKET \
     --output-template-file packaged.yaml
 
 sam deploy --template-file packaged.yaml --stack-name $STACK_NAME \
     --capabilities CAPABILITY_IAM --parameter-overrides \
-    PortfolioId=$PORTFOLIO_ID Bucket=$TEMPLATE_BUCKET EventBus=$EVENT_BUS
+    PortfolioId=$PORTFOLIO_ID Bucket=$TEMPLATE_BUCKET EventBus=$EVENT_BUS SourcePortfolioId=$SOURCE_PORTFOLIO_ID
 ```
 
 ## Todo

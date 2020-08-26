@@ -9,6 +9,8 @@ Parameters:
     Type: String
 
 Resources:
+  ArtifactBucket:
+    Type: AWS::S3::Bucket
   Portfolio:
     Type: AWS::ServiceCatalog::Portfolio
     Properties: 
@@ -17,6 +19,8 @@ Resources:
       ProviderName: !Ref ProviderName
 
 Outputs:
+  ArtifactBucket:
+    Value: !Ref ArtifactBucket
   PortfolioArn:
     Value: !Sub "arn:aws:servicecatalog:${AWS::Region}:${AWS::AccountId}:portfolio/${Portfolio}"
   PortfolioId:
