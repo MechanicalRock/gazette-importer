@@ -41,7 +41,7 @@
     "webpack-cli": "^3.3.6"
   },
   "dependencies": {
-    "@hapi/joi": "^15.1.0",
+    "@hapi/joi": "^15.1.1",
     "aws-sdk": "^2.503.0",
     "aws-xray-sdk": "^2.3.4",
     "env-var": "^4.0.1"
